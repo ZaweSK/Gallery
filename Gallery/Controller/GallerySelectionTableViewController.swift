@@ -8,14 +8,26 @@
 
 import UIKit
 
-class GallerySelectionTableViewController: UITableViewController {
-
+class GallerySelectionTableViewController: UITableViewController, GalleryNameEditDelegate {
+    
     var itemsSub = ["Empty", "Empty2", "Empty3"]
     var recentlyDeletedSub : [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(_:)))
+        tap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tap)
 
+    }
+    
+    @objc func doubleTapped(_ sender: UITapGestureRecognizer){
+        if let indexPath = tableView.indexPathForRow(at: sender.location(in: self.view)) {
+            if let cell = tableView.cellForRow(at: indexPath) as? GallerySelectionTableViewCell {
+                cell.isEditing = true
+            }
+        }
     }
 
     // MARK: - Table view data source
@@ -29,9 +41,12 @@ class GallerySelectionTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "galleryNameCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "galleryNameCell", for: indexPath) as! GallerySelectionTableViewCell
+        cell.delegate = self
+        cell.galleryNameTextField.text = itemsSub[indexPath.row]
         
-        cell.textLabel?.text = itemsSub[indexPath.row]
+        cell.selectionStyle = .none
+        
         return cell
     }
 
@@ -55,5 +70,15 @@ class GallerySelectionTableViewController: UITableViewController {
             }
         }
     }
-
+    
+    // MARK: - GalleryCellNameEditDelegate methods
+    func galleryNameEdited(with newName: String, in cell: UITableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            print("edited")
+            
+            itemsSub[indexPath.row] = newName
+            tableView.reloadData()
+            
+        }
+    }
 }

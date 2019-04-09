@@ -12,6 +12,7 @@
 		D089F985225C7DA60043B154 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D089F984225C7DA60043B154 /* Assets.xcassets */; };
 		D089F988225C7DA60043B154 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D089F986225C7DA60043B154 /* LaunchScreen.storyboard */; };
 		D089F990225C7E770043B154 /* GallerySelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F98F225C7E770043B154 /* GallerySelectionTableViewController.swift */; };
+		D089F992225C9EEA0043B154 /* GallerySelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F991225C9EEA0043B154 /* GallerySelectionTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		D089F987225C7DA60043B154 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D089F989225C7DA60043B154 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D089F98F225C7E770043B154 /* GallerySelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GallerySelectionTableViewController.swift; sourceTree = "<group>"; };
+		D089F991225C9EEA0043B154 /* GallerySelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GallerySelectionTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +56,39 @@
 		D089F97C225C7DA30043B154 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				D089F994225C9EF50043B154 /* Model */,
+				D089F995225C9EFA0043B154 /* View */,
+				D089F993225C9EEF0043B154 /* Controller */,
 				D089F97D225C7DA30043B154 /* AppDelegate.swift */,
-				D089F981225C7DA30043B154 /* Main.storyboard */,
-				D089F98F225C7E770043B154 /* GallerySelectionTableViewController.swift */,
 				D089F984225C7DA60043B154 /* Assets.xcassets */,
 				D089F986225C7DA60043B154 /* LaunchScreen.storyboard */,
 				D089F989225C7DA60043B154 /* Info.plist */,
 			);
 			path = Gallery;
+			sourceTree = "<group>";
+		};
+		D089F993225C9EEF0043B154 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D089F98F225C7E770043B154 /* GallerySelectionTableViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		D089F994225C9EF50043B154 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D089F995225C9EFA0043B154 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D089F981225C7DA30043B154 /* Main.storyboard */,
+				D089F991225C9EEA0043B154 /* GallerySelectionTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +164,7 @@
 			files = (
 				D089F97E225C7DA30043B154 /* AppDelegate.swift in Sources */,
 				D089F990225C7E770043B154 /* GallerySelectionTableViewController.swift in Sources */,
+				D089F992225C9EEA0043B154 /* GallerySelectionTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
