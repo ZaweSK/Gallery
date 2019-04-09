@@ -8,7 +8,8 @@
 
 import UIKit
 
-class GallerySelectionTableViewController: UITableViewController, GalleryNameEditDelegate {
+class GallerySelectionTableViewController: UITableViewController
+{
     
     var itemsSub = ["Empty", "Empty2", "Empty3"]
     var recentlyDeletedSub : [String] = []
@@ -24,14 +25,14 @@ class GallerySelectionTableViewController: UITableViewController, GalleryNameEdi
     
     @objc func doubleTapped(_ sender: UITapGestureRecognizer){
         if let indexPath = tableView.indexPathForRow(at: sender.location(in: self.view)) {
+            guard indexPath.section == 0 else {return}
             if let cell = tableView.cellForRow(at: indexPath) as? GallerySelectionTableViewCell {
                 cell.isEditing = true
             }
         }
     }
-
+    
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -71,14 +72,34 @@ class GallerySelectionTableViewController: UITableViewController, GalleryNameEdi
         }
     }
     
-    // MARK: - GalleryCellNameEditDelegate methods
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        if indexPath.section == 1 {
+            let action = UIContextualAction(style: .normal, title: "Undelete") { (action, view, _ ) in
+                let recoveringItem = self.recentlyDeletedSub.remove(at: indexPath.row)
+                self.itemsSub.append(recoveringItem)
+                self.tableView.reloadData()
+            }
+            
+            return UISwipeActionsConfiguration(actions: [action])
+        }else {
+            return nil
+        }
+    }
+}
+
+
+
+
+// MARK: - GalleryCellNameEditDelegate methods
+
+extension GallerySelectionTableViewController: GalleryNameEditDelegate
+{
     func galleryNameEdited(with newName: String, in cell: UITableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
-            print("edited")
-            
             itemsSub[indexPath.row] = newName
             tableView.reloadData()
-            
         }
     }
 }
