@@ -21,7 +21,13 @@ class GallerySelectionTableViewController: UITableViewController
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(_:)))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
-
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        self.tableView(self.tableView, didSelectRowAt: indexPath)
     }
     
     @IBAction func addNewGallery(_ sender: UIBarButtonItem) {
@@ -107,6 +113,7 @@ class GallerySelectionTableViewController: UITableViewController
     // MARK : - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(#function)
         performSegue(withIdentifier: "showGallery", sender: indexPath)
     }
     
@@ -122,8 +129,6 @@ class GallerySelectionTableViewController: UITableViewController
             galleryVC.title = gallery
         }
     }
-    
-   
 }
 
 
