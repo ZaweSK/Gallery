@@ -11,7 +11,8 @@ import UIKit
 class GallerySelectionTableViewController: UITableViewController
 {
     
-    var itemsSub = ["Empty", "Empty2", "Empty3"]
+    var itemsSub = ["Empty 1", "Empty 2", "Empty 3"] 
+     
     var recentlyDeletedSub : [String] = []
     
     override func viewDidLoad() {
@@ -21,6 +22,20 @@ class GallerySelectionTableViewController: UITableViewController
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
 
+    }
+    
+    @IBAction func addNewGallery(_ sender: UIBarButtonItem) {
+            let newGallery = "Empty".madeUnique(withRespectTo: itemsSub)
+            itemsSub.append(newGallery)
+            tableView.reloadData()
+    }
+    
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if splitViewController?.preferredDisplayMode != .primaryOverlay{
+            splitViewController?.preferredDisplayMode = . primaryOverlay
+        }
     }
     
     @objc func doubleTapped(_ sender: UITapGestureRecognizer){
@@ -46,7 +61,7 @@ class GallerySelectionTableViewController: UITableViewController
         cell.delegate = self
         cell.galleryNameTextField.text = itemsSub[indexPath.row]
         
-        cell.selectionStyle = .none
+      
         
         return cell
     }
@@ -87,6 +102,28 @@ class GallerySelectionTableViewController: UITableViewController
             return nil
         }
     }
+    
+    
+    // MARK : - Navigation
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showGallery", sender: indexPath)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showGallery" {
+            
+            let indexPath = sender as! IndexPath
+            let gallery = itemsSub[indexPath.row]
+            
+            let navigationVC = segue.destination as! UINavigationController
+            let galleryVC = navigationVC.viewControllers.first as! GalleryCollectionViewController
+            
+            galleryVC.title = gallery
+        }
+    }
+    
+   
 }
 
 
