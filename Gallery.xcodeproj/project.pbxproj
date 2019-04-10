@@ -17,6 +17,7 @@
 		D089F99A225CBCA60043B154 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F999225CBCA60043B154 /* Utilities.swift */; };
 		D089F99C225DC0190043B154 /* TestCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F99B225DC0190043B154 /* TestCollectionViewController.swift */; };
 		D089F99E225DC08C0043B154 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F99D225DC08C0043B154 /* GalleryCollectionViewCell.swift */; };
+		D089F9A0225DD84F0043B154 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F99F225DD84F0043B154 /* Image.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		D089F999225CBCA60043B154 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		D089F99B225DC0190043B154 /* TestCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCollectionViewController.swift; sourceTree = "<group>"; };
 		D089F99D225DC08C0043B154 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		D089F99F225DD84F0043B154 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			children = (
 				D089F98F225C7E770043B154 /* GallerySelectionTableViewController.swift */,
 				D089F996225CB5AE0043B154 /* GalleryCollectionViewController.swift */,
+				D089F99F225DD84F0043B154 /* Image.swift */,
 				D089F99B225DC0190043B154 /* TestCollectionViewController.swift */,
 			);
 			path = Controller;
@@ -175,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D089F97E225C7DA30043B154 /* AppDelegate.swift in Sources */,
+				D089F9A0225DD84F0043B154 /* Image.swift in Sources */,
 				D089F990225C7E770043B154 /* GallerySelectionTableViewController.swift in Sources */,
 				D089F992225C9EEA0043B154 /* GallerySelectionTableViewCell.swift in Sources */,
 				D089F99A225CBCA60043B154 /* Utilities.swift in Sources */,

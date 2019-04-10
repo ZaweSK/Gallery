@@ -10,4 +10,12 @@ import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet var label: UILabel!
+    
+    var url = URL(string: "https://www.facebook.com")
+    
+    
+    override func prepareForReuse() {
+        <#code#>
+    }
 }
