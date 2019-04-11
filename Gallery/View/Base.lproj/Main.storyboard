@@ -100,7 +100,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="270" height="219"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ecj-0a-0zY">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ecj-0a-0zY">
                                             <rect key="frame" x="0.0" y="0.0" width="0.0" height="219"/>
                                         </imageView>
                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9uA-aB-Z88">
@@ -108,7 +108,7 @@
                                         </activityIndicatorView>
                                     </subviews>
                                 </view>
-                                <color key="backgroundColor" red="0.88235294119999996" green="0.34509803919999998" blue="0.16078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="9uA-aB-Z88" firstAttribute="centerY" secondItem="EfH-0H-ity" secondAttribute="centerY" id="67J-BL-qM3"/>
                                     <constraint firstItem="9uA-aB-Z88" firstAttribute="centerX" secondItem="EfH-0H-ity" secondAttribute="centerX" id="6a0-Ri-Izi"/>
@@ -121,6 +121,23 @@
                                     <outlet property="imageView" destination="ecj-0a-0zY" id="NiV-I8-5wx"/>
                                     <outlet property="spinner" destination="9uA-aB-Z88" id="KOo-iA-SPV"/>
                                 </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="dropPlaceholderCell" id="L6T-V7-fyP">
+                                <rect key="frame" x="433.5" y="0.0" width="270" height="219"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="270" height="219"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="krt-zG-3Df">
+                                            <rect key="frame" x="-10" y="99.5" width="20" height="20"/>
+                                        </activityIndicatorView>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="krt-zG-3Df" firstAttribute="centerX" secondItem="L6T-V7-fyP" secondAttribute="centerX" id="7Yw-Sh-M5k"/>
+                                    <constraint firstItem="krt-zG-3Df" firstAttribute="centerY" secondItem="L6T-V7-fyP" secondAttribute="centerY" id="dM3-iJ-dQy"/>
+                                </constraints>
                             </collectionViewCell>
                         </cells>
                         <connections>

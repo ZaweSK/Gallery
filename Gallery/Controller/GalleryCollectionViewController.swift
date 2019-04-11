@@ -109,6 +109,7 @@ extension GalleryCollectionViewController:  UICollectionViewDropDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         if collectionView.hasActiveDrag{
+            
             return session.canLoadObjects(ofClass: NSURL.self)
         }else {
             return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
@@ -125,31 +126,50 @@ extension GalleryCollectionViewController:  UICollectionViewDropDelegate, UIColl
         
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         
-       
+        let items = coordinator.items
         
         switch coordinator.proposal.operation {
-            
+          
         case .copy:
             
-            let items = coordinator.items
-            
-            for item in items {
+            if items.count == 1 , let item = items.first {
                 
-                item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (newUrl, error)  in
-                    
-                    guard let url = newUrl as? URL else { return }
-                    
-                    let image = Image(url: url)
-               
-                    self.galleryImages.insert(image, at: destinationIndexPath.row)
-                    
-                    DispatchQueue.main.async {
-                        self.collectionView.insertItems(at: [destinationIndexPath])
+                let placeholderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "dropPlaceholderCell"))
+                
+                var draggedImage = Image()
+                
+                item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
+                   
+                    if let url = provider as? URL {
+                        
+                        draggedImage.remoteURL = url
+                        
+                        ImageFetcher.fetchContent(for: draggedImage).done { image in
+                            
+                            placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
+                                self.galleryImages.insert(draggedImage, at: insertionIndexPath.row)
+                            })
+                            
+                        }.catch { _ in
+                            placeholderContext.deletePlaceholder()
+                        }
                     }
                 }
             }
             
-//        case .move:
+        case .move:
+            
+            if items.count == 1 , let item = items.first, let sourceIndexPath = item.sourceIndexPath {
+                
+                collectionView.performBatchUpdates({
+                    self.galleryImages.remove(at: sourceIndexPath.row)
+                    self.galleryImages.insert(item.dragItem.localObject as! Image, at: destinationIndexPath.row)
+                    collectionView.deleteItems(at: [sourceIndexPath])
+                    collectionView.insertItems(at: [destinationIndexPath])
+                }, completion: nil)
+                
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
             
         default: break
         }

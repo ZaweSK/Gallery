@@ -17,6 +17,10 @@ struct Image: Equatable  {
         self.remoteURL = url
     }
     
+    init(){
+        
+    }
+    
     static func == (lhs: Image, rhs: Image) -> Bool {
         return lhs.remoteURL == rhs.remoteURL
         
