@@ -113,7 +113,6 @@ class GallerySelectionTableViewController: UITableViewController
     // MARK : - Navigation
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(#function)
         performSegue(withIdentifier: "showGallery", sender: indexPath)
     }
     

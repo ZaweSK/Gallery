@@ -10,12 +10,37 @@ import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet var label: UILabel!
     
-    var url = URL(string: "https://www.facebook.com")
     
+    @IBOutlet var spinner: UIActivityIndicatorView!
+    
+    @IBOutlet var imageView: UIImageView!
+    
+    func update(with image: UIImage?){
+        
+        if let imageToDisplay = image {
+            print("stopAnimating")
+            spinner.stopAnimating()
+            imageView.image = imageToDisplay
+            
+        }else {
+            spinner.startAnimating()
+            imageView.image = nil
+        }
+    }
+    
+    func imageNotFound(){
+        spinner.stopAnimating()
+        imageView.image = UIImage(named: "placeholderImage")
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        update(with: nil)
+    }
     
     override func prepareForReuse() {
-        <#code#>
+        super.prepareForReuse()
+        update(with: nil)
     }
 }

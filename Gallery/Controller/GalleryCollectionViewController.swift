@@ -12,14 +12,23 @@ import UIKit
 
 class GalleryCollectionViewController: UICollectionViewController {
     
-    var itemsSub = ["a","b","c", "d"]
+    var galleryImages : [Image] = {
+        let image1 = Image(url: URL(string: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu4SFLvr4FLtDjZ5F4ivTUO8s_AcA588QiJ_Wz1gAqofpG8Tut9Q")!)
+
+        let image3 = Image(url: URL(string: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0YFaQGjeg_f9U_bOjAOAS3_WmXl3ykffBmb_ahG3IbEDOxQNeEw")!)
+        
+        return [image1, image3]
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
-        
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        flowLayout?.invalidateLayout()
     }
 
    
@@ -29,19 +38,45 @@ class GalleryCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itemsSub.count
+        return galleryImages.count
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryItemCell", for: indexPath) as! GalleryCollectionViewCell
-    
-        cell.backgroundColor = UIColor.gray
-        cell.label.text = itemsSub[indexPath.row]
-        
         return cell
     }
-
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let galleryItem = galleryImages[indexPath.row]
+        
+        ImageFetcher.fetchContent(for: galleryItem).done { image in
+            
+            if let cell = self.isCellDisplayed(for: galleryItem) {
+                
+                cell.update(with: image)
+            }
+            
+            }.catch { error in
+                
+                if let cell = self.isCellDisplayed(for: galleryItem) {
+                    cell.imageNotFound()
+                }
+                
+        }
+    }
+    
+    
+    private func isCellDisplayed(for image : Image) -> GalleryCollectionViewCell? {
+        
+        guard let imageIndex = galleryImages.index(of: image) else { return nil }
+        
+        let imageIndexPath = IndexPath(item: imageIndex, section: 0)
+        
+        let cell = collectionView.cellForItem(at: imageIndexPath) as? GalleryCollectionViewCell
+        
+        return cell ?? nil
+    }
    
 }
 
@@ -62,15 +97,12 @@ extension GalleryCollectionViewController:  UICollectionViewDropDelegate, UIColl
 
     private func dragItems(at indexPath: IndexPath)->[UIDragItem]{
         
-        if let url = (collectionView.cellForItem(at: indexPath) as? GalleryCollectionViewCell)?.url as NSURL? {
-
-            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: url))
-            dragItem.localObject = url
-
-            return [dragItem]
-        } else {
-            return []
-        }
+        let galleryImage = galleryImages[indexPath.row]
+        let itemProvider =  NSItemProvider(object: galleryImage.remoteURL as NSURL )
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = galleryImage
+        
+        return [dragItem]
     }
     
     // DROP
@@ -90,7 +122,37 @@ extension GalleryCollectionViewController:  UICollectionViewDropDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        print("perform drop")
+        
+        let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+        
+       
+        
+        switch coordinator.proposal.operation {
+            
+        case .copy:
+            
+            let items = coordinator.items
+            
+            for item in items {
+                
+                item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (newUrl, error)  in
+                    
+                    guard let url = newUrl as? URL else { return }
+                    
+                    let image = Image(url: url)
+               
+                    self.galleryImages.insert(image, at: destinationIndexPath.row)
+                    
+                    DispatchQueue.main.async {
+                        self.collectionView.insertItems(at: [destinationIndexPath])
+                    }
+                }
+            }
+            
+//        case .move:
+            
+        default: break
+        }
     }
 }
 
@@ -122,7 +184,6 @@ extension GalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        print(#function)
         
         let itemsContainerWidth = view.bounds.width - totalCollectionViewHorizontalPadding
         

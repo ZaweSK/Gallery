@@ -9,7 +9,16 @@
 import Foundation
 import UIKit
 
-struct Image {
-    let remoteURL : URL
-    let aspectRatio : CGFloat
+struct Image: Equatable  {
+    var remoteURL : URL!
+    
+    
+    init(url: URL) {
+        self.remoteURL = url
+    }
+    
+    static func == (lhs: Image, rhs: Image) -> Bool {
+        return lhs.remoteURL == rhs.remoteURL
+        
+    }
 }
