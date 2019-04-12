@@ -7,22 +7,33 @@
 //
 
 import UIKit
+import RealmSwift
 
-
-
-class GalleryCollectionViewController: UICollectionViewController {
+class GalleryCollectionViewController: UICollectionViewController
+{
     
-    var galleryImages : [Image] = {
-        let image1 = Image(url: URL(string: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu4SFLvr4FLtDjZ5F4ivTUO8s_AcA588QiJ_Wz1gAqofpG8Tut9Q")!)
+    // MARK : - Stored Properities
+    
+    var realm = try! Realm()
+    
+    var gallery : Gallery? {
+        didSet {
+            loadGalleryItems()
+        }
+    }
+    
+    var galleryItems: List<GalleryItem>?
+    
+    func loadGalleryItems(){
+        galleryItems = gallery?.items
+        collectionView.reloadData()
+    }
 
-        let image3 = Image(url: URL(string: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0YFaQGjeg_f9U_bOjAOAS3_WmXl3ykffBmb_ahG3IbEDOxQNeEw")!)
-        
-        return [image1, image3]
-    }()
+    // MARK : View Controller's Life Cycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
     }
@@ -31,50 +42,51 @@ class GalleryCollectionViewController: UICollectionViewController {
         flowLayout?.invalidateLayout()
     }
 
-   
-
+    // MARK: - CollectionView Data Source & Delegate Methods
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return galleryImages.count
+        return galleryItems?.count ?? 0
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryItemCell", for: indexPath) as! GalleryCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "galleryItemCell", for: indexPath)
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+
+        guard let galleryItem = galleryItems?[indexPath.row] else { return }
         
-        let galleryItem = galleryImages[indexPath.row]
-        
-        ImageFetcher.fetchContent(for: galleryItem).done { image in
-            
+        guard let url = galleryItem.remoteURLString else { return }
+
+        ImageFetcher.fetchContent2(for: url).done { image in
+
             if let cell = self.isCellDisplayed(for: galleryItem) {
-                
+
                 cell.update(with: image)
             }
-            
+
             }.catch { error in
-                
+
                 if let cell = self.isCellDisplayed(for: galleryItem) {
                     cell.imageNotFound()
                 }
-                
         }
     }
     
     
-    private func isCellDisplayed(for image : Image) -> GalleryCollectionViewCell? {
-        
-        guard let imageIndex = galleryImages.index(of: image) else { return nil }
-        
+    private func isCellDisplayed(for galleryItem : GalleryItem) -> GalleryCollectionViewCell? {
+
+        guard let imageIndex = galleryItems?.index(of: galleryItem) else { return nil }
+
         let imageIndexPath = IndexPath(item: imageIndex, section: 0)
-        
+
         let cell = collectionView.cellForItem(at: imageIndexPath) as? GalleryCollectionViewCell
-        
+
         return cell ?? nil
     }
    
@@ -83,94 +95,102 @@ class GalleryCollectionViewController: UICollectionViewController {
 // MARK: - UIColletionView Drag & Drop
 
 extension GalleryCollectionViewController:  UICollectionViewDropDelegate, UICollectionViewDragDelegate{
-    
+
     // DRAG
-    
+
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         session.localContext = collectionView
         return dragItems(at: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
         return dragItems(at: indexPath)
     }
 
     private func dragItems(at indexPath: IndexPath)->[UIDragItem]{
-        
-        let galleryImage = galleryImages[indexPath.row]
-        let itemProvider =  NSItemProvider(object: galleryImage.remoteURL as NSURL )
+
+        guard let galleryItem = galleryItems?[indexPath.row] , let url = URL(string: galleryItem.remoteURLString!) else { return []}
+        let itemProvider =  NSItemProvider(object: url as NSURL )
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = galleryImage
-        
+        dragItem.localObject = galleryItem
+
         return [dragItem]
     }
-    
+
     // DROP
-    
+
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         if collectionView.hasActiveDrag{
-            
+
             return session.canLoadObjects(ofClass: NSURL.self)
         }else {
             return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         let isSelf = (session.localDragSession?.localContext) as? UICollectionView == collectionView
-        
+
         return UICollectionViewDropProposal(operation: isSelf ? .move : .copy, intent: .insertAtDestinationIndexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        
+
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
-        
+
         let items = coordinator.items
-        
+
         switch coordinator.proposal.operation {
-          
+
         case .copy:
-            
+
             if items.count == 1 , let item = items.first {
-                
+
                 let placeholderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "dropPlaceholderCell"))
-                
-                var draggedImage = Image()
-                
+
                 item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
-                   
+
                     if let url = provider as? URL {
+
+                        let urlString = String(describing: url)
                         
-                        draggedImage.remoteURL = url
-                        
-                        ImageFetcher.fetchContent(for: draggedImage).done { image in
+                        ImageFetcher.fetchContent2(for: urlString).done { image in
+                            
+                            let newItem = GalleryItem()
+                            newItem.remoteURLString = urlString
+                            newItem.id = UUID().uuidString
                             
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
-                                self.galleryImages.insert(draggedImage, at: insertionIndexPath.row)
+                                
+                                try? self.realm.write {
+                                     self.galleryItems?.insert(newItem, at: insertionIndexPath.row)
+                                }
                             })
-                            
-                        }.catch { _ in
+
+                        }.catch { error in
+                            print(error)
                             placeholderContext.deletePlaceholder()
                         }
                     }
                 }
             }
-            
+
         case .move:
-            
+
             if items.count == 1 , let item = items.first, let sourceIndexPath = item.sourceIndexPath {
-                
+
                 collectionView.performBatchUpdates({
-                    self.galleryImages.remove(at: sourceIndexPath.row)
-                    self.galleryImages.insert(item.dragItem.localObject as! Image, at: destinationIndexPath.row)
-                    collectionView.deleteItems(at: [sourceIndexPath])
-                    collectionView.insertItems(at: [destinationIndexPath])
+                    try? realm.write {
+                        self.galleryItems?.remove(at: sourceIndexPath.row)
+                        self.galleryItems?.insert(item.dragItem.localObject as! GalleryItem, at: destinationIndexPath.row)
+                        collectionView.deleteItems(at: [sourceIndexPath])
+                        collectionView.insertItems(at: [destinationIndexPath])
+                    }
+                   
                 }, completion: nil)
-                
+
                 coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
             }
-            
         default: break
         }
     }

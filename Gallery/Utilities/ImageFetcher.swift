@@ -18,10 +18,7 @@ enum PhotoFetchError: Error {
 struct ImageFetcher {
 
 
-    static func fetchContent(for image: Image) -> Promise<UIImage> {
-        
-        print("------------------")
-        print(image.remoteURL)
+    static func fetchContent(for url: URL) -> Promise<UIImage> {
         
         let bgq = DispatchQueue.global(qos: .userInitiated)
         
@@ -30,10 +27,37 @@ struct ImageFetcher {
             bgq.async {
                 
                 do {
-                    let imageData = try Data(contentsOf: image.remoteURL.imageURL)
+                    let imageData = try Data(contentsOf: url.imageURL)
                     
                     if let image = UIImage(data: imageData) {
-                        print(image)
+            
+                        seal.fulfill(image)
+                    }else {
+                        seal.reject(PhotoFetchError.unableToCreatePhotoFromData)
+                    }
+                    
+                }catch {
+                    seal.reject(error)
+                }
+            }
+        }
+    }
+    
+    static func fetchContent2(for urlString: String) -> Promise<UIImage> {
+        
+        let bgq = DispatchQueue.global(qos: .userInitiated)
+        
+        return Promise<UIImage> { seal in
+            
+            bgq.async {
+                
+                guard let url = URL(string: urlString)  else {return}
+                
+                do {
+                    let imageData = try Data(contentsOf: url.imageURL)
+                    
+                    if let image = UIImage(data: imageData) {
+                        
                         seal.fulfill(image)
                     }else {
                         seal.reject(PhotoFetchError.unableToCreatePhotoFromData)

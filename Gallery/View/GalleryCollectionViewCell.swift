@@ -9,9 +9,7 @@
 import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
-    
-    
-    
+
     @IBOutlet var spinner: UIActivityIndicatorView!
     
     @IBOutlet var imageView: UIImageView!
@@ -19,7 +17,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     func update(with image: UIImage?){
         
         if let imageToDisplay = image {
-            print("stopAnimating")
+          
             spinner.stopAnimating()
             imageView.image = imageToDisplay
             

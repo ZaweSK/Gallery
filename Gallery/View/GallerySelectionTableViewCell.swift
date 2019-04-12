@@ -27,6 +27,7 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate
     
     override var isEditing: Bool {
         didSet{
+            
            galleryNameTextField.isEnabled = isEditing
             
             if isEditing == true {
