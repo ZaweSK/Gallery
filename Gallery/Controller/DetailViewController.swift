@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import RealmSwift
 
 class DetailViewController: UIViewController, UIScrollViewDelegate {
+    
+    var realm = try! Realm()
 
     // MARK: - View Controller Life Cycle Methods
     
@@ -22,6 +25,12 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidAppear(animated)
         
         guard let urlString = item.remoteURLString else {return}
+        
+        if let imageFromDisk = ImageStore.getImage(for: item) {
+            self.spinner.stopAnimating()
+            self.image = imageFromDisk
+            return
+        }
         
         ImageFetcher.fetchContent2(for: urlString).done { (image) in
             self.spinner.stopAnimating()
@@ -60,6 +69,25 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             scrollView.delegate = self
         }
     }
+    
+    @IBAction func deleteItem(_ sender: UIBarButtonItem) {
+        
+        do {
+            try ImageStore.removeImage(for: item)
+            try realm.write {
+                realm.delete(item)
+            }
+            
+            navigationController?.popToRootViewController(animated: true)
+            
+        }catch {
+            let alertController = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            let alertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alertController.addAction(alertAction)
+            present(alertController, animated: true, completion: nil)
+        }
+    }
+    
     
     // MARK: - Centering Scroll View's content
     

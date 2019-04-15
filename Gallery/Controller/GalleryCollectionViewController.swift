@@ -40,18 +40,23 @@ class GalleryCollectionViewController: UICollectionViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         itemWidth = minimumItemWidth
 
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
+    }
+ 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         flowLayout?.invalidateLayout()
     }
 
-    
+   
     // MARK: - Handling Pinch Gesture
     
     @IBAction func didPinch(_ pinch: UIPinchGestureRecognizer) {
@@ -88,6 +93,12 @@ class GalleryCollectionViewController: UICollectionViewController
         guard let galleryItem = galleryItems?[indexPath.row] else { return }
         
         guard let url = galleryItem.remoteURLString else { return }
+        
+        if let image = ImageStore.getImage(for: galleryItem) {
+            let galleryCell = cell as! GalleryCollectionViewCell
+            galleryCell.update(with: image)
+            return
+        }
 
         ImageFetcher.fetchContent2(for: url).done { image in
 
@@ -195,14 +206,15 @@ extension GalleryCollectionViewController:  UICollectionViewDropDelegate, UIColl
                         
                         ImageFetcher.fetchContent2(for: urlString).done { image in
                             
-                            let newItem = GalleryItem()
-                            newItem.remoteURLString = urlString
-                            newItem.id = UUID().uuidString
+                            let newGalleryItem = GalleryItem()
+                            newGalleryItem.remoteURLString = urlString
+                            newGalleryItem.id = UUID().uuidString
+                            ImageStore.save(image, for: newGalleryItem)
                             
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
                                 
                                 try? self.realm.write {
-                                     self.galleryItems?.insert(newItem, at: insertionIndexPath.row)
+                                     self.galleryItems?.insert(newGalleryItem, at: insertionIndexPath.row)
                                 }
                             })
 

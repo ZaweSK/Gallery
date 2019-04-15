@@ -196,6 +196,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="12w-gr-nB3"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Detail" id="w2t-IJ-xGr">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="cLb-6h-hxl">
+                            <connections>
+                                <action selector="deleteItem:" destination="eM4-o3-oKD" id="L0K-HI-YuF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="imageView" destination="5t8-JX-z1e" id="owv-vj-Swe"/>
                         <outlet property="imageViewBottomConstraint" destination="ojy-rB-RoG" id="cNZ-wE-W3N"/>

@@ -55,8 +55,12 @@ class GallerySelectionTableViewController: UITableViewController
     
     func delete(_ gallery: Gallery){
         do { try realm.write {
-                realm.delete(gallery.items)
-                realm.delete(gallery)}
+           
+            gallery.items.forEach {
+               try? ImageStore.removeImage(for: $0)
+            }
+            realm.delete(gallery.items)
+            realm.delete(gallery)}
         } catch { }
     }
     
