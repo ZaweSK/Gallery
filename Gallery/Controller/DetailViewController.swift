@@ -77,7 +77,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         let heightScale = view.height / imageSize.height
         
         let minScale = min(widthScale,heightScale)
-        scrollView.minimumZoomScale = minScale * 0.5
+        scrollView.minimumZoomScale = minScale * 0.2
         scrollView.maximumZoomScale = 5
         scrollView.zoomScale = minScale
     }

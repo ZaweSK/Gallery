@@ -28,11 +28,20 @@ class GalleryCollectionViewController: UICollectionViewController
         galleryItems = gallery?.items
         collectionView.reloadData()
     }
-
+    
+    
+    var itemWidth : CGFloat! {
+        didSet{
+            flowLayout?.invalidateLayout()
+        }
+    }
+    
     // MARK : View Controller's Life Cycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        itemWidth = minimumItemWidth
 
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
@@ -42,6 +51,23 @@ class GalleryCollectionViewController: UICollectionViewController
         flowLayout?.invalidateLayout()
     }
 
+    
+    // MARK: - Handling Pinch Gesture
+    
+    @IBAction func didPinch(_ pinch: UIPinchGestureRecognizer) {
+        switch pinch.state {
+        case .ended , .changed :
+            
+            let widthProposal = itemWidth * pinch.scale
+            guard widthProposal > minimumItemWidth else { return }
+            guard widthProposal < maximumItemWidth else { return }
+            
+            itemWidth = widthProposal
+            
+        default: break
+        }
+    }
+    
     // MARK: - CollectionView Data Source & Delegate Methods
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -224,30 +250,32 @@ extension GalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
         static let itemsVerticalSpacing: CGFloat = 5
     }
     
-    var numberOfItemsInRow : Int {
-        return 3
+    var minimumItemWidth : CGFloat {
+        return (view.bounds.width - totalCollectionViewHorizontalPadding)/4 - 5
     }
+    
+    var maximumItemWidth : CGFloat {
+        return view.bounds.width - totalCollectionViewHorizontalPadding * 4
+    }
+    
     
     var totalCollectionViewHorizontalPadding : CGFloat {
         return FlowLayoutConstatns.collectionViewInset * 2
     }
     
-    var totalItemsHorizontalSpacing: CGFloat {
-        return CGFloat((numberOfItemsInRow - 1)) * FlowLayoutConstatns.itemsHorizontalSpacing
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let itemsContainerWidth = view.bounds.width - totalCollectionViewHorizontalPadding
-        
-        let itemWidth = (itemsContainerWidth - totalItemsHorizontalSpacing) / CGFloat(numberOfItemsInRow)
-        
+
         return CGSize(width: itemWidth, height: itemWidth)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset = FlowLayoutConstatns.collectionViewInset
-        return UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        
+        let numberOfItemsInRow = CGFloat(Int(view.bounds.width / itemWidth))
+        let emptySpace = view.bounds.width - CGFloat(numberOfItemsInRow) * itemWidth
+        let innerHorizontalSpacing : CGFloat = (numberOfItemsInRow - 1) * FlowLayoutConstatns.itemsHorizontalSpacing
+        let xOffset = (emptySpace - innerHorizontalSpacing) / 2
+
+        return UIEdgeInsets(top: 10, left: xOffset , bottom: 10, right: xOffset)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

@@ -87,6 +87,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="703.5" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="YG0-Yd-mTl">
                             <size key="itemSize" width="270" height="219"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -143,13 +144,18 @@
                             </collectionViewCell>
                         </cells>
                         <connections>
-                            <outlet property="dataSource" destination="RX8-ve-v93" id="qjW-Ht-xzz"/>
                             <outlet property="delegate" destination="RX8-ve-v93" id="489-0O-yT8"/>
+                            <outletCollection property="gestureRecognizers" destination="AvL-Qy-gsI" appends="YES" id="KYX-sK-9iO"/>
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="yoO-rn-0bh"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="27D-qn-Ovy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="AvL-Qy-gsI">
+                    <connections>
+                        <action selector="didPinch:" destination="RX8-ve-v93" id="TIk-2b-Omh"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1687" y="513"/>
         </scene>
