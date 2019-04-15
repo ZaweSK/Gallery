@@ -89,7 +89,20 @@ class GalleryCollectionViewController: UICollectionViewController
 
         return cell ?? nil
     }
-   
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            if let indexPath = collectionView.indexPathsForSelectedItems?.first {
+                
+                let detailVC = segue.destination as! DetailViewController
+                
+                
+                detailVC.item = galleryItems?[indexPath.row]
+            }
+        }
+    }
 }
 
 // MARK: - UIColletionView Drag & Drop

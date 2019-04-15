@@ -10,6 +10,7 @@
 		D03DAF05225F0E4800EA4C7C /* ImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAF04225F0E4800EA4C7C /* ImageFetcher.swift */; };
 		D03DAF30225F79B300EA4C7C /* Gallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAF2F225F79B300EA4C7C /* Gallery.swift */; };
 		D03DAF32225F7A1000EA4C7C /* GalleryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAF31225F7A1000EA4C7C /* GalleryItem.swift */; };
+		D03DAF3422644DC300EA4C7C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAF3322644DC300EA4C7C /* DetailViewController.swift */; };
 		D089F97E225C7DA30043B154 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D089F97D225C7DA30043B154 /* AppDelegate.swift */; };
 		D089F983225C7DA30043B154 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D089F981225C7DA30043B154 /* Main.storyboard */; };
 		D089F985225C7DA60043B154 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D089F984225C7DA60043B154 /* Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		D03DAF04225F0E4800EA4C7C /* ImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcher.swift; sourceTree = "<group>"; };
 		D03DAF2F225F79B300EA4C7C /* Gallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Gallery.swift; path = ../../Gallery.swift; sourceTree = "<group>"; };
 		D03DAF31225F7A1000EA4C7C /* GalleryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryItem.swift; sourceTree = "<group>"; };
+		D03DAF3322644DC300EA4C7C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		D089F97A225C7DA30043B154 /* Gallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D089F97D225C7DA30043B154 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D089F982225C7DA30043B154 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 		D089F993225C9EEF0043B154 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				D03DAF3322644DC300EA4C7C /* DetailViewController.swift */,
 				D089F98F225C7E770043B154 /* GallerySelectionTableViewController.swift */,
 				D089F996225CB5AE0043B154 /* GalleryCollectionViewController.swift */,
 				D089F99B225DC0190043B154 /* TestCollectionViewController.swift */,
@@ -276,6 +279,7 @@
 				D089F97E225C7DA30043B154 /* AppDelegate.swift in Sources */,
 				D089F9A0225DD84F0043B154 /* Image.swift in Sources */,
 				D089F990225C7E770043B154 /* GallerySelectionTableViewController.swift in Sources */,
+				D03DAF3422644DC300EA4C7C /* DetailViewController.swift in Sources */,
 				D03DAF05225F0E4800EA4C7C /* ImageFetcher.swift in Sources */,
 				D03DAF30225F79B300EA4C7C /* Gallery.swift in Sources */,
 				D089F992225C9EEA0043B154 /* GallerySelectionTableViewCell.swift in Sources */,

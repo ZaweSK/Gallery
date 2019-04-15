@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -120,6 +121,7 @@
                                 <connections>
                                     <outlet property="imageView" destination="ecj-0a-0zY" id="NiV-I8-5wx"/>
                                     <outlet property="spinner" destination="9uA-aB-Z88" id="KOo-iA-SPV"/>
+                                    <segue destination="eM4-o3-oKD" kind="show" identifier="showDetail" id="edy-8n-2Ek"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="dropPlaceholderCell" id="L6T-V7-fyP">
@@ -150,6 +152,57 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="27D-qn-Ovy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1687" y="513"/>
+        </scene>
+        <!--Detail-->
+        <scene sceneID="UTV-tX-lPk">
+            <objects>
+                <viewController title="Detail" id="eM4-o3-oKD" customClass="DetailViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="c5J-ab-Hrs">
+                        <rect key="frame" x="0.0" y="0.0" width="703.5" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nC4-Hv-8he">
+                                <rect key="frame" x="0.0" y="70" width="703.5" height="698"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="5t8-JX-z1e">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                    </imageView>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Yfa-gZ-81K">
+                                        <rect key="frame" x="342" y="339" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="5t8-JX-z1e" secondAttribute="trailing" id="K62-pj-1Us"/>
+                                    <constraint firstItem="5t8-JX-z1e" firstAttribute="leading" secondItem="nC4-Hv-8he" secondAttribute="leading" id="P3b-Ba-jDg"/>
+                                    <constraint firstItem="Yfa-gZ-81K" firstAttribute="centerY" secondItem="nC4-Hv-8he" secondAttribute="centerY" id="efa-n6-EsN"/>
+                                    <constraint firstItem="Yfa-gZ-81K" firstAttribute="centerX" secondItem="nC4-Hv-8he" secondAttribute="centerX" id="ehn-UH-iBt"/>
+                                    <constraint firstItem="5t8-JX-z1e" firstAttribute="top" secondItem="nC4-Hv-8he" secondAttribute="top" id="i26-4T-6Hf"/>
+                                    <constraint firstAttribute="bottom" secondItem="5t8-JX-z1e" secondAttribute="bottom" id="ojy-rB-RoG"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="12w-gr-nB3" firstAttribute="trailing" secondItem="nC4-Hv-8he" secondAttribute="trailing" id="IgJ-1M-3yH"/>
+                            <constraint firstItem="nC4-Hv-8he" firstAttribute="top" secondItem="12w-gr-nB3" secondAttribute="top" id="Vo4-IA-yTx"/>
+                            <constraint firstItem="12w-gr-nB3" firstAttribute="bottom" secondItem="nC4-Hv-8he" secondAttribute="bottom" id="mpb-lx-JoL"/>
+                            <constraint firstItem="nC4-Hv-8he" firstAttribute="leading" secondItem="12w-gr-nB3" secondAttribute="leading" id="tUH-oO-2gp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="12w-gr-nB3"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="5t8-JX-z1e" id="owv-vj-Swe"/>
+                        <outlet property="imageViewBottomConstraint" destination="ojy-rB-RoG" id="cNZ-wE-W3N"/>
+                        <outlet property="imageViewLeadingConstraint" destination="P3b-Ba-jDg" id="sGs-HD-X9C"/>
+                        <outlet property="imageViewTopConstraint" destination="i26-4T-6Hf" id="hbC-sg-DzE"/>
+                        <outlet property="imageViewTrailingConstraint" destination="K62-pj-1Us" id="mB9-ym-kjg"/>
+                        <outlet property="scrollView" destination="nC4-Hv-8he" id="fxr-HB-avv"/>
+                        <outlet property="spinner" destination="Yfa-gZ-81K" id="4Kh-jE-Uqw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h4O-yX-PJa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2364" y="208"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="qv6-ej-R2S">
